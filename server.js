@@ -27,7 +27,8 @@ const Message = mongoose.model('Message', new mongoose.Schema({
     sender: String,
     receiver: String,
     content: String,
-    isPrivate: Boolean
+    isPrivate: Boolean,
+    room: String
 }));
 
 app.use(cors());
@@ -52,11 +53,13 @@ app.post('/login', async (req, res) => {
     res.send('Login exitoso');
 });
 
-// WebSockets para chat en tiempo real
+const users = {}; // Almacena usuarios conectados
+
 io.on('connection', (socket) => {
     console.log('Usuario conectado');
 
     socket.on('join', (username) => {
+        users[username] = socket.id;
         socket.username = username;
     });
 
@@ -66,14 +69,37 @@ io.on('connection', (socket) => {
         io.emit('message', { sender, content });
     });
 
-    socket.on('privateMessage', async ({ sender, receiver, content }) => {
-        const message = new Message({ sender, receiver, content, isPrivate: true });
-        await message.save();
-        socket.broadcast.emit(`privateMessage-${receiver}`, { sender, content });
+    // Chat privado
+    socket.on('join-private', (username) => {
+        users[username] = socket.id;
+        socket.username = username;
     });
+
+    socket.on('create-private-room', ({ sender, receiver }) => {
+        const receiverSocketId = users[receiver];
+        if (!receiverSocketId) {
+            socket.emit('private-room-error', 'El destinatario no está conectado');
+            return;
+        }
+        const room = `private-${[sender, receiver].sort().join('-')}`;
+        socket.join(room);
+        io.to(receiverSocketId).emit('private-room-created', room);
+        socket.emit('private-room-created', room);
+    });
+
+    socket.on('private-message', async ({ room, sender, receiver, content }) => {
+        const message = new Message({ sender, receiver, content, isPrivate: true, room });
+        await message.save();
+        
+        // Enviar el mensaje a TODOS en la sala, incluido el emisor
+        io.to(room).emit('private-message', { room, sender, content });
+    });
+    
+    
 
     socket.on('disconnect', () => {
         console.log('Usuario desconectado');
+        delete users[socket.username];
     });
 });
 
@@ -86,4 +112,5 @@ app.get('/ChatPublico', (req, res) => {
 app.get('/ChatPrivado', (req, res) => {
     res.sendFile(path.join(__dirname, 'chatprivado.html'));
 });
+
 server.listen(3000, () => console.log('Servidor corriendo en http://localhost:3000'));

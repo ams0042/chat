@@ -4,178 +4,304 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat Privado</title>
-<!-- chatpublico.html y chatprivado.html -->
-<style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: 'Inter', sans-serif;
-    }
-    
-    body {
-        background: #0a0a0a;
-        color: #fff;
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
-    }
-    
-    .container {
-        background: #1a1a1a;
-        border-radius: 20px;
-        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
-        width: 90%;
-        max-width: 800px;
-        height: 90vh;
-        display: flex;
-        flex-direction: column;
-        padding: 2rem;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    
-    h2 {
-        color: #fff;
-        text-align: center;
-        margin-bottom: 1.5rem;
-        font-size: 1.8rem;
-        font-weight: 700;
-    }
-    
-    #chatBox {
-        flex: 1;
-        overflow-y: auto;
-        padding: 1rem;
-        background: #2d2d2d;
-        border-radius: 12px;
-        margin-bottom: 1rem;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    
-    #chatBox p {
-        background: #3d3d3d;
-        border-left: 4px solid #ff4444;
-        padding: 1rem;
-        margin: 1rem 0;
-        border-radius: 8px;
-        animation: messageIn 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-        color: #fff;
-    }
-    
-    @keyframes messageIn {
-        from { opacity: 0; transform: translateX(20px); }
-        to { opacity: 1; transform: translateX(0); }
-    }
-    
-    input {
-        background: #2d2d2d;
-        border: 2px solid #3d3d3d;
-        color: #fff;
-        padding: 1rem;
-        border-radius: 12px;
-        font-size: 1rem;
-        transition: all 0.3s ease;
-        width: 100%;
-        margin-bottom: 1rem;
-    }
-    
-    input:focus {
-        outline: none;
-        border-color: #ff4444;
-        box-shadow: 0 0 0 3px rgba(255, 68, 68, 0.2);
-    }
-    
-    button {
-        background: #ff4444;
-        color: white;
-        padding: 1rem;
-        border: none;
-        border-radius: 12px;
-        font-size: 1rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        width: 100%;
-    }
-    
-    button:hover {
-        background: #ff3333;
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(255, 68, 68, 0.3);
-    }
-    
-    a {
-        color: #ff4444;
-        text-decoration: none;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        text-align: center;
-        margin-top: 1rem;
-    }
-    
-    a:hover {
-        color: #ff3333;
-        text-decoration: underline;
-    }
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: #0a0a0a;
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: #1a1a1a;
+            width: 95%;
+            max-width: 1000px;
+            height: 90vh;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .header {
+            padding: 1.5rem;
+            background: #2d2d2d;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header h2 {
+            color: #ff4444;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .header a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+        }
+
+        .header a:hover {
+            background: rgba(255, 68, 68, 0.1);
+        }
+
+        .chat-container {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: #2d2d2d;
+            padding: 1.5rem;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        #receiver {
+            width: 100%;
+            padding: 0.8rem;
+            background: #3d3d3d;
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            margin-bottom: 1rem;
+        }
+
+        .user-list {
+            list-style: none;
+        }
+
+        .user-list li {
+            padding: 0.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .user-list li:hover {
+            background: rgba(255, 68, 68, 0.1);
+        }
+
+        .chat-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #chatBox {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            background: #1a1a1a;
+        }
+
+        .message {
+            max-width: 70%;
+            margin-bottom: 1.5rem;
+            animation: messageIn 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .message.sent {
+            margin-left: auto;
+        }
+
+        .message-content {
+            padding: 1rem;
+            border-radius: 15px;
+            background: #ff4444;
+            color: white;
+            position: relative;
+        }
+
+        .message.received .message-content {
+            background: #3d3d3d;
+        }
+
+        .message-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        .input-container {
+            padding: 1.5rem;
+            background: #2d2d2d;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            gap: 1rem;
+        }
+
+        #messageInput {
+            flex: 1;
+            padding: 1rem;
+            background: #3d3d3d;
+            border: none;
+            border-radius: 12px;
+            color: #fff;
+        }
+
+        button {
+            background: #ff4444;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: #ff3333;
+            transform: translateY(-2px);
+        }
+
+        @keyframes messageIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .notification {
+            /* Mantener el estilo de notificaciones previo */
+        }
     </style>
     <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
     <div class="container">
-        <h2>Chat Privado</h2>
-        <input type="text" id="receiver" placeholder="Usuario destinatario">
-        <div id="chatBox"></div>
-        <input type="text" id="messageInput" placeholder="Escribe un mensaje...">
-        <button onclick="sendPrivateMessage()">Enviar</button>
-        <a href="chatpublico.html">Ir a Chat Público</a>
+        <div class="header">
+            <h2>Chat Privado 🔒</h2>
+            <a href="chatpublico.html">← Volver al Público</a>
+        </div>
+
+        <div class="chat-container">
+            <div class="sidebar">
+                <input type="text" id="receiver" placeholder="Nombre del destinatario">
+                <button onclick="startPrivateChat()">Iniciar Conversación</button>
+                <ul class="user-list">
+                    <!-- Lista de usuarios dinámica -->
+                </ul>
+            </div>
+
+            <div class="chat-main">
+                <div id="chatBox">
+                    <!-- Mensajes dinámicos -->
+                </div>
+
+                <div class="input-container">
+                    <input type="text" id="messageInput" placeholder="Escribe tu mensaje...">
+                    <button onclick="sendPrivateMessage()">Enviar 🚀</button>
+                </div>
+            </div>
+        </div>
     </div>
-    
+
     <script>
         const socket = io();
-        // Reemplazar el prompt por:
-const username = sessionStorage.getItem('username');
-if (!username) window.location.href = '/login.html';
+        const username = sessionStorage.getItem('username') || 'Invitado';
+        let privateRoom = null; // Almacena la sala privada actual
 
-// Al inicio del script
-socket.emit('join', username);
-        socket.on(`privateMessage-${username}`, (data) => {
-            displayMessage(data.sender, data.content);
-        });
+        // Conexión inicial
+        socket.emit('join-private', username);
 
-        function sendPrivateMessage() {
-            const receiver = document.getElementById('receiver').value;
-            const content = document.getElementById('messageInput').value;
-
-            if (receiver.trim() === '' || content.trim() === '') {
-                showNotification('Debes ingresar un destinatario y mensaje', 'error');
+        // Iniciar conversación privada
+        function startPrivateChat() {
+            const receiver = document.querySelector('#receiver').value;
+            if (!receiver) {
+                showNotification('❌ Ingresa el nombre del destinatario', 'error');
                 return;
             }
-            
-            displayMessage(username, content);
-            socket.emit('privateMessage', { sender: username, receiver, content });
-            document.getElementById('messageInput').value = '';
+
+            // Emitir evento para crear sala privada
+            socket.emit('create-private-room', { sender: username, receiver });
         }
 
-        function displayMessage(sender, content) {
-            const chatBox = document.getElementById('chatBox');
-            const msg = document.createElement('p');
-            msg.textContent = `${sender}: ${content}`;
-            chatBox.appendChild(msg);
+        // Recibir confirmación de sala privada
+        socket.on('private-room-created', (room) => {
+            privateRoom = room; // Guardar la sala actual
+            showNotification(`✅ Sala privada creada con ${room.split('-')[1]}`, 'success');
+        });
+
+        // Recibir mensaje privado
+        socket.on('private-message', (data) => {
+    if (data.room === privateRoom) {
+        displayMessage(data.sender, data.content, data.sender === username); 
+    }
+});
+
+
+        // Enviar mensaje privado
+        function sendPrivateMessage() {
+            const message = document.querySelector('#messageInput').value;
+            if (!privateRoom || !message) {
+                showNotification('❌ No hay una conversación activa o el mensaje está vacío', 'error');
+                return;
+            }
+
+            socket.emit('private-message', {
+                room: privateRoom,
+                sender: username,
+                content: message
+            });
+
+            document.querySelector('#messageInput').value = '';
+        }
+
+        // Mostrar mensajes
+        function displayMessage(sender, content, isSent) {
+            const chatBox = document.querySelector('#chatBox');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isSent ? 'sent' : 'received'}`;
+
+            messageDiv.innerHTML = `
+                <div class="message-info">
+                    <span>${isSent ? 'Tú' : sender}</span>
+                    <span>${new Date().toLocaleTimeString()}</span>
+                </div>
+                <div class="message-content">${content}</div>
+            `;
+
+            chatBox.appendChild(messageDiv);
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
+        // Sistema de notificaciones
         function showNotification(message, type) {
             const notification = document.createElement('div');
             notification.className = `notification ${type}`;
             notification.textContent = message;
             document.body.appendChild(notification);
 
-            setTimeout(() => {
-                notification.remove();
-            }, 3000);
+            setTimeout(() => notification.remove(), 3000);
         }
+
+        // Detectar la tecla "Enter" en el campo de texto y enviar mensaje
+document.querySelector("#messageInput").addEventListener("keypress", function(event) {
+    if (event.key === "Enter") { // Si la tecla presionada es "Enter"
+        event.preventDefault(); // Evita el salto de línea en el input
+        sendPrivateMessage(); // Llama a la función de envío de mensaje
+    }
+});
+
     </script>
 </body>
 </html>

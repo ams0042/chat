@@ -159,6 +159,15 @@ socket.emit('join', username);
         function irPrivado(){
             window.location.href = '/ChatPrivado';
         }
+
+        // Detectar la tecla "Enter" en el campo de texto y enviar mensaje
+document.querySelector("#messageInput").addEventListener("keypress", function(event) {
+    if (event.key === "Enter") { // Si la tecla presionada es "Enter"
+        event.preventDefault(); // Evita el salto de línea en el input
+        sendMessage(); // Llama a la función de envío de mensaje
+    }
+});
+
     </script>
 </body>
 </html>
