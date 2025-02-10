@@ -46,14 +46,6 @@
             background: white;
         }
 
-        #chatBox p {
-            margin-bottom: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: #f7fafc;
-            border-radius: 15px;
-            border: 1px solid #e2e8f0;
-        }
-
         input[type="text"] {
             padding: 0.8rem;
             border: 2px solid #e2e8f0;
@@ -88,11 +80,6 @@
         a:hover {
             text-decoration: underline;
         }
-
-        /* Notificaciones igual que en login */
-        .notification {
-            /* ... (copiar mismo estilo de notificaciones) ... */
-        }
     </style>
     <script src="/socket.io/socket.io.js"></script>
 </head>
@@ -102,13 +89,10 @@
         <div id="chatBox"></div>
         <input type="text" id="messageInput" placeholder="Escribe un mensaje...">
         <button onclick="sendMessage()">Enviar</button>
-        <a href="ChatPrivado.html">Ir a Chat Privado</a>
+        <a href="chatprivado.html">Ir a Chat Privado</a>
     </div>
     
     <script>
-        // Función showNotification igual que en login
-        // ... (copiar función de notificación) ...
-
         const socket = io();
         const username = prompt('Ingresa tu nombre de usuario:');
         socket.emit('join', username);

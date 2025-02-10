@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat Privado</title>
     <style>
-         * {
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -36,6 +36,15 @@
             margin-bottom: 1.5rem;
         }
 
+        #receiver {
+            margin-bottom: 1rem;
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
         #chatBox {
             flex: 1;
             overflow-y: auto;
@@ -47,11 +56,11 @@
         }
 
         #chatBox p {
-            margin-bottom: 0.5rem;
+            background: #ebf8ff;
+            border: 1px solid #bee3f8;
             padding: 0.5rem 1rem;
-            background: #f7fafc;
             border-radius: 15px;
-            border: 1px solid #e2e8f0;
+            margin-bottom: 0.5rem;
         }
 
         input[type="text"] {
@@ -60,6 +69,7 @@
             border-radius: 8px;
             width: 100%;
             margin-bottom: 1rem;
+            font-size: 1rem;
         }
 
         button {
@@ -70,6 +80,7 @@
             border-radius: 8px;
             cursor: pointer;
             transition: transform 0.2s ease;
+            font-size: 1rem;
         }
 
         button:hover {
@@ -88,40 +99,6 @@
         a:hover {
             text-decoration: underline;
         }
-
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 1rem 2rem;
-            border-radius: 8px;
-            color: white;
-            font-weight: 500;
-            opacity: 0;
-            transform: translateX(100%);
-            animation: slideIn 0.3s ease forwards;
-            z-index: 1000;
-        }
-        .success {
-            background: #48bb78;
-        }
-
-        .error {
-            background: #f56565;
-        }
-        
-        #receiver {
-            margin-bottom: 1rem;
-            width: 100%;
-            padding: 0.8rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-        }
-        
-        #chatBox p {
-            background: #ebf8ff;
-            border-color: #bee3f8;
-        }
     </style>
     <script src="/socket.io/socket.io.js"></script>
 </head>
@@ -132,13 +109,10 @@
         <div id="chatBox"></div>
         <input type="text" id="messageInput" placeholder="Escribe un mensaje...">
         <button onclick="sendPrivateMessage()">Enviar</button>
-        <a href="ChatPublico.html">Ir a Chat Público</a>
+        <a href="chatpublico.html">Ir a Chat Público</a>
     </div>
     
     <script>
-        // Función showNotification igual que en login
-        // ... (copiar función de notificación) ...
-
         const socket = io();
         const username = prompt('Ingresa tu nombre de usuario:');
         socket.emit('join', username);
@@ -150,6 +124,7 @@
         function sendPrivateMessage() {
             const receiver = document.getElementById('receiver').value;
             const content = document.getElementById('messageInput').value;
+
             if (receiver.trim() === '' || content.trim() === '') {
                 showNotification('Debes ingresar un destinatario y mensaje', 'error');
                 return;
@@ -166,6 +141,17 @@
             msg.textContent = `${sender}: ${content}`;
             chatBox.appendChild(msg);
             chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
         }
     </script>
 </body>
