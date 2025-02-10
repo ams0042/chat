@@ -11,7 +11,7 @@ const server = http.createServer(app);
 const io = socketIo(server);
 
 // Conectar a MongoDB Atlas
-mongoose.connect('mongodb+srv://eal0013:eva1234@cluster0.b9ajz.mongodb.net/chatDB', {
+mongoose.connect('mongodb+srv://alexms:1100alex@cluster0.r2cob.mongodb.net/chat1', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => console.log('Conectado a MongoDB Atlas'))

@@ -132,31 +132,46 @@
     
     <script>
         function showNotification(message, type) {
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.textContent = message;
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.remove();
-            }, 3000);
-        }
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.innerHTML = `
+        <div class="notification-icon">${type === 'success' ? '✓' : '✗'}</div>
+        <div class="notification-content">${message}</div>
+    `;
+    document.body.appendChild(notification);
+
+    // Animación de entrada
+    setTimeout(() => {
+        notification.style.transform = 'translateX(0)';
+        notification.style.opacity = '1';
+    }, 10);
+
+    // Eliminar después de 3 segundos
+    setTimeout(() => {
+        notification.style.transform = 'translateX(120%)';
+        notification.style.opacity = '0';
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
+}
 
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            
-            const res = await fetch('/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password })
-            });
-            
-            const text = await res.text();
-            showNotification(text, res.ok ? 'success' : 'error');
-            if (res.ok) window.location.href = '/ChatPublico';
-        });
+    e.preventDefault();
+    const username = document.getElementById('username').value;
+    
+    const res = await fetch('/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+            username: document.getElementById('username').value,
+            password: document.getElementById('password').value
+        })
+    });
+    
+    if (res.ok) {
+        sessionStorage.setItem('username', username);
+        window.location.href = '/ChatPublico';
+    }
+});
     </script>
 </body>
 </html>
