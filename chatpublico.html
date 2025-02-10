@@ -89,7 +89,7 @@
         <div id="chatBox"></div>
         <input type="text" id="messageInput" placeholder="Escribe un mensaje...">
         <button onclick="sendMessage()">Enviar</button>
-        <a href="chatprivado.html">Ir a Chat Privado</a>
+        <a onclick="irPrivado()">Ir a Chat Privado</a>
     </div>
     
     <script>
@@ -111,6 +111,9 @@
             
             socket.emit('message', { sender: username, content });
             document.getElementById('messageInput').value = '';
+        }
+        function irPrivado(){
+            window.location.href = '/ChatPrivado';
         }
     </script>
 </body>

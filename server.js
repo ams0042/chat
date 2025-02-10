@@ -80,5 +80,10 @@ io.on('connection', (socket) => {
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'login.html'));
 });
-
+app.get('/ChatPublico', (req, res) => {
+    res.sendFile(path.join(__dirname, 'chatpublico.html'));
+});
+app.get('/ChatPrivado', (req, res) => {
+    res.sendFile(path.join(__dirname, 'chatprivado.html'));
+});
 server.listen(3000, () => console.log('Servidor corriendo en http://localhost:3000'));
